@@ -1,0 +1,144 @@
+//creating login database to store ID and Password
+CREATE DATABASE digi;
+use digi;
+CREATE TABLE login(l_mail varchar(30),l_pass varchar(15));
+
+//Insert
+INSERT INTO `login`(`l_mail`, `l_pass`) VALUES ("superadmin@gmail.com","superadmin");
+INSERT INTO `login`(`l_mail`, `l_pass`) VALUES ("hassanadmin@gmail.com","hassanadmin");
+
+//create district and admin
+CREATE TABLE admin(
+    a_id INT AUTO_INCREMENT,
+    a_fname VARCHAR(20),
+    a_lname VARCHAR(20),
+    a_adrs VARCHAR(250) UNIQUE,
+    a_pno CHAR(10) UNIQUE,
+    a_email varchar(50) UNIQUE,
+    PRIMARY KEY(a_id)
+);
+
+INSERT INTO admin(a_fname,a_lname,a_adrs,a_pno,a_email) VALUES("Shylesh","N", "Nandagokula, 427/1, Channarayaptna, Bagalkot taluk, Bagalkot Dist. Karnataka 573573", "9988776655", "shylesh.bgl@gmail.com");
+INSERT INTO admin(a_fname,a_lname,a_adrs,a_pno,a_email) VALUES("Sukkerth","Vasista", "Nandagokula, 427/1, Channarayaptna, Bellary taluk, Bellary Dist. Karnataka 573573", "9955789999", "sukk.bel@gmail.com");
+INSERT INTO admin(a_fname,a_lname,a_adrs,a_pno,a_email) VALUES("Manju","Charan", "Nandagokula, 427/1, Channarayaptna, Belagavi taluk, Belagavi Dist. Karnataka 573573", "9955989999", "manju.bgm@gmail.com");
+INSERT INTO admin(a_fname,a_lname,a_adrs,a_pno,a_email) VALUES("Shreeshail","Hosur", "Nandagokula, 427/1, Channarayaptna, Bengaluru taluk, Bengluru Dist. Karnataka 573573", "9975989999", "shree.blr@gmail.com");
+INSERT INTO admin(a_fname,a_lname,a_adrs,a_pno,a_email) VALUES("Abhi","Kushal", "Nandagokula, 427/1, Channarayaptna, Bengaluru Urban taluk, Bengluru Urban Dist. Karnataka 573573", "9975989499", "abhi.blu@gmail.com");
+
+SELECT * FROM admin;
+
+CREATE TABLE district(
+    d_id CHAR(4),
+    d_name VARCHAR(20) UNIQUE,
+    d_num_school INT DEFAULT 0,
+    a_id INT,
+    FOREIGN KEY(a_id) REFERENCES admin(a_id) ON UPDATE CASCADE ON DELETE SET NULL,
+    PRIMARY KEY(d_id)
+);
+
+INSERT INTO district VALUES("BGLK","BAGALKOTE",0,"1");
+INSERT INTO district VALUES("BELR","BELLARY",0,2);
+INSERT INTO district VALUES("BGLM","BELAGAUM",0,3);
+INSERT INTO district VALUES("BLRR","BENGALURU RURAL",0,4);
+INSERT INTO district VALUES("BLRU","BENGALURU URBAN",0,4);
+INSERT INTO district VALUES("BIDR","BIDAR",0,5);
+
+SELECT * FROM district;
+
+//create and insert school 
+SELECT * FROM resource;
+
+CREATE TABLE school(
+    s_id INT AUTO_INCREMENT,
+    s_name VARCHAR(50),
+    s_hm_name VARCHAR(40),
+    s_email VARCHAR(50) UNIQUE,
+    s_num_stud INT DEFAULT 0,
+    s_staff INT DEFAULT 0,
+    s_adrs VARCHAR(250) UNIQUE,
+    s_medium char(3) DEFAULT "KAN",
+    s_type char(3) DEFAULT "GOV",
+    d_id char(4),
+    FOREIGN KEY(d_id) REFERENCES district(d_id) ON UPDATE CASCADE ON DELETE SET NULL,
+    PRIMARY KEY(s_id)
+);
+
+ALTER TABLE school AUTO_INCREMENT=100001;
+
+INSERT INTO school(s_name,s_hm_name,s_email,s_adrs,d_id) 
+VALUES("GHS BAGALKOTE","Balaguru","ghsbgl@gmail.com","64, 15th cross, 5th main, Bagalkote","BGLK");
+
+INSERT INTO school(s_name,s_hm_name,s_email,s_adrs,d_id) 
+VALUES("GHS BELLARY","Ramesh","ghsbel@gmail.com","3, 10th cross, 15th main, Bellary","BELR");
+
+INSERT INTO school(s_name,s_hm_name,s_email,s_adrs,d_id) 
+VALUES("GHS BELAGAUM","Suresh","ghsbgm@gmail.com","64, 15th cross, 5th main, Belagaum","BGLM");
+
+INSERT INTO school(s_name,s_hm_name,s_email,s_adrs,d_id) 
+VALUES("GHS BIDAR","Biradar","ghsbdr@gmail.com","64, 15th cross, 5th main, Bidar","BIDR");
+
+INSERT INTO school(s_name,s_hm_name,s_email,s_adrs,d_id) 
+VALUES("GHS BANG RURAL","Belagappa","ghsben@gmail.com","64, 15th cross, 5th main, Bengaluru","BLRR");
+
+SELECT * FROM school;
+
+//create and insert into students
+DROP TABLE student;
+CREATE TABLE student(
+    stu_id INT AUTO_INCREMENT,
+    stu_fname VARCHAR(20),
+    stu_lname VARCHAR(20),
+    stu_dob DATE,
+    stu_age INT,
+    stu_std INT,
+    stu_father VARCHAR(40),
+    stu_mother VARCHAR(40),
+    s_id INT,
+    FOREIGN KEY(s_id) REFERENCES school(s_id) ON UPDATE CASCADE ON DELETE SET NULL,
+    PRIMARY KEY(stu_id)
+);
+
+ALTER TABLE student AUTO_INCREMENT=1000001;
+
+
+
+INSERT INTO student
+(stu_fname,stu_lname,stu_dob,stu_age,stu_std,stu_father,stu_mother,s_id) 
+VALUES("Akhilesh", "Kamath", "2003-10-10",16,10,"Kamath","Kumari",100001);
+
+INSERT INTO student
+(stu_fname,stu_lname,stu_dob,stu_age,stu_std,stu_father,stu_mother,s_id) 
+VALUES("lesh", "Kumar", "2003-10-10",16,10,"Kumar","Devamma",100001);
+
+INSERT INTO student
+(stu_fname,stu_lname,stu_dob,stu_age,stu_std,stu_father,stu_mother,s_id) 
+VALUES("Likilesh", "Gowda", "2003-10-10",17,10,"Ranga","Nayaki",100001);
+
+INSERT INTO student
+(stu_fname,stu_lname,stu_dob,stu_age,stu_std,stu_father,stu_mother,s_id) 
+VALUES("Sharath", "Shetty", "2003-10-10",15,9,"Gurikar","Gowri",100001);
+
+INSERT INTO student
+(stu_fname,stu_lname,stu_dob,stu_age,stu_std,stu_father,stu_mother,s_id) 
+VALUES("Sagar", "Bhat", "2003-10-10",16,9,"Vivek","Vaidehi",100001);
+
+INSERT INTO student
+(stu_fname,stu_lname,stu_dob,stu_age,stu_std,stu_father,stu_mother,s_id) 
+VALUES("Samarth", "Vasista", "2003-10-10",18,9,"Madan","malavika",100002);
+
+INSERT INTO student
+(stu_fname,stu_lname,stu_dob,stu_age,stu_std,stu_father,stu_mother,s_id) 
+VALUES("Kumar", "Kant", "2003-10-10",17,9,"Lohith","Lohini",100002);
+
+INSERT INTO student
+(stu_fname,stu_lname,stu_dob,stu_age,stu_std,stu_father,stu_mother,s_id) 
+VALUES("Puneeth", "Raj", "2003-10-10",16,9,"Raju","Rani",100002);
+
+INSERT INTO student
+(stu_fname,stu_lname,stu_dob,stu_age,stu_std,stu_father,stu_mother,s_id) 
+VALUES("Shiva", "Lingahhya", "2003-10-10",16,9,"Sidda","Singamma",100003),("Sagar", "Bhat", "2003-10-10",16,9,"Vivek","Vaidehi",100003);
+
+INSERT INTO student
+(stu_fname,stu_lname,stu_dob,stu_age,stu_std,stu_father,stu_mother,s_id) 
+VALUES("Sagar", "Bhat", "2003-10-10",17,9,"Vivek","Vaidehi",100002);
+
+SELECT * FROM student;
